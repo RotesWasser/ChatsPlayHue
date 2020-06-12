@@ -35,7 +35,7 @@ namespace ChatsPlayHue
 
             actionSource.Start();
 
-            Console.ReadKey();
+            Console.Read();
         }
 
     }
