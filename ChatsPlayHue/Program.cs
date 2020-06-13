@@ -7,6 +7,8 @@ using SimpleInjector;
 using SimpleInjector.Lifestyles;
 using System;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using ChatsPlayHue.Light;
 
 namespace ChatsPlayHue
 {
@@ -20,20 +22,48 @@ namespace ChatsPlayHue
 
             container.Register<ILightActionSource, DummyLightActionSource>(Lifestyle.Singleton);
 
-            // Technologies
-            container.Register<ILightTechnologyConnector, PhilipsHueConnector>(Lifestyle.Singleton);
-            // container.Collection.Append<ILightTechnologyConnection, OtherConnector>(Lifestyle.Singleton);
 
-            container.Verify();
+            // Technologies
+            container.Register<PhilipsHueConnector>(Lifestyle.Singleton);
+            container.Collection.Register<ILightTechnologyConnector>(typeof(PhilipsHueConnector));
+            container.Register<CredentialsStorage>(Lifestyle.Singleton);
+
+            // UI
+            container.Register<IHueConfigurationUI, ConsoleHueConfigurationUI>(Lifestyle.Singleton);
+
+
+            try {
+                container.Verify();
+            } catch (Exception ex) {
+                Debug.Print(ex.Message);
+                System.Environment.Exit(-1);
+            }
         }
 
         static async Task Main(string[] args)
         {
             var actionSource = container.GetInstance<ILightActionSource>();
 
-            actionSource.Subscribe(new SimpleLightActionObserver());
-
+            //actionSource.Subscribe(new SimpleLightActionObserver());
             actionSource.Start();
+
+            ILightBridge whateverBridge = null;
+
+            foreach(var connector in container.GetAllInstances<ILightTechnologyConnector>()) {
+                var bridges = connector.GetBridges();
+
+                if (bridges.Count > 0) {
+                    whateverBridge = bridges[0];
+                    break;
+                }
+            }
+
+            if (whateverBridge == null) {
+                Console.WriteLine("Couldn't find a bridge. Exiting.");
+                System.Environment.Exit(-1);
+            }
+
+            await whateverBridge.Connect();
 
             Console.Read();
         }

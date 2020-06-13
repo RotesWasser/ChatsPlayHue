@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ChatsPlayHue.Light
 {
-    interface ILight
+    public interface ILight
     {
         Color LightColor { get; set; }
         LightPowerState PowerState { get; set; }
