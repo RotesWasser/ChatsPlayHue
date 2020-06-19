@@ -14,15 +14,17 @@ namespace ChatsPlayHue.LightConnections.PhilipsHue
 {
     class PhilipsHueConnector : ILightTechnologyConnector
     {
+        private readonly CredentialsStorage credentialsStorage;
+        private readonly IHueConfigurationUI hueUI;
         private RestClient client;
-        private Container diContainer;
 
-        public PhilipsHueConnector(Container diContainer)
+        public PhilipsHueConnector(CredentialsStorage credentialsStorage, IHueConfigurationUI hueUI)
         {   
             client = new RestClient("https://discovery.meethue.com/");
             client.UseSystemTextJson();
 
-            this.diContainer = diContainer;
+            this.credentialsStorage = credentialsStorage;
+            this.hueUI = hueUI;
         }
 
         public IList<ILightBridge> GetBridges()
@@ -32,7 +34,7 @@ namespace ChatsPlayHue.LightConnections.PhilipsHue
             var response = client.Get<BridgeDiscoveryElement[]>(request);
 
             return response.Data.Select(
-                x => (ILightBridge) new PhilipsHueBridge(diContainer.GetInstance<CredentialsStorage>(), diContainer.GetInstance<IHueConfigurationUI>(), x.id, x.internalipaddress)).ToList();
+                x => (ILightBridge) new PhilipsHueBridge(credentialsStorage, hueUI, x.id, x.internalipaddress)).ToList();
         }
     }
 }
