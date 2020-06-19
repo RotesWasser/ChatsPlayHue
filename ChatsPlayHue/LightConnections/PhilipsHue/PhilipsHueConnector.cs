@@ -27,8 +27,11 @@ namespace ChatsPlayHue.LightConnections.PhilipsHue
             this.hueUI = hueUI;
         }
 
+
         public IList<ILightBridge> GetBridges()
         {
+            // TODO This is terrible because we keep creating new bridges on every GetBridges call here.
+            // It would be better if we stored them in a dict of bridge identifier -> bridge object.
             var request = new RestRequest("/", DataFormat.Json);
 
             var response = client.Get<BridgeDiscoveryElement[]>(request);

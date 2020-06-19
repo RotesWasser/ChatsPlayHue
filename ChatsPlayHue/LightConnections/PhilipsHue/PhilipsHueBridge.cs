@@ -49,7 +49,7 @@ namespace ChatsPlayHue.LightConnections.PhilipsHue
             if (credentials == null) {
                 await CreateBridgeUser();
             } else {
-                // TODO: Test credentials pair.
+                // TODO Test credentials pair.
                 var testConfigRequest = new RestRequest(string.Format("/{0}/config", credentials.Username), DataFormat.Json);
 
                 var testConfigResponse = client.Get<BridgeConfigurationResponse>(testConfigRequest);
@@ -85,6 +85,7 @@ namespace ChatsPlayHue.LightConnections.PhilipsHue
 
         public IList<ILight> GetLights()
         {
+            // TODO Continue here.
             throw new NotImplementedException();
         }
     }
