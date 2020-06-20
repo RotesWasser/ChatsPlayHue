@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ChatsPlayHue.Light
 {
     public interface ILight
     {
-        Color LightColor { get; set; }
-        LightPowerState PowerState { get; set; }
+        Task<Color> GetLightColor();        
+        Task SetLightColor(Color newColor);
+
+        Task<LightPowerState> GetPowerState();
+        Task SetPowerState(LightPowerState newState);
 
         string Name { get; }
     }

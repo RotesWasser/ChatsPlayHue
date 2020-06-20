@@ -49,7 +49,7 @@ namespace ChatsPlayHue.LightActionSource.DummyLightActionSource
 
                 nextState = nextState == LightPowerState.On ? LightPowerState.Off : LightPowerState.On;
 
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
             }
         }
 

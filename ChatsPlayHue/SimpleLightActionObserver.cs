@@ -1,4 +1,5 @@
-﻿using ChatsPlayHue.LightActions;
+﻿using ChatsPlayHue.Light;
+using ChatsPlayHue.LightActions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,6 +8,12 @@ namespace ChatsPlayHue
 {
     class SimpleLightActionObserver : IObserver<LightAction>, ILightActionVisitor
     {
+        private IList<ILight> lightsToControl;
+
+        public SimpleLightActionObserver(IList<ILight> lightsToControl) {
+            this.lightsToControl = lightsToControl;
+        }
+        
         public void OnCompleted()
         {
             Console.WriteLine("Completed!");
@@ -32,9 +39,12 @@ namespace ChatsPlayHue
             Console.WriteLine(string.Format("Color requested: {0}", action.LightColor));
         }
 
-        public void Visit(ToggleLightAction action)
+        public async void Visit(ToggleLightAction action)
         {
             Console.WriteLine(string.Format("Toggle requested: {0}", action.NewState));
+            foreach (var light in lightsToControl) {
+                await light.SetPowerState(action.NewState);
+            }
         }
     }
 }

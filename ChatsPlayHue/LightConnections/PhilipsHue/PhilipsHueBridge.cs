@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
+
+using System.Linq;
 
 using RestSharp;
 using RestSharp.Serializers.SystemTextJson;
@@ -21,6 +24,8 @@ namespace ChatsPlayHue.LightConnections.PhilipsHue
         private CredentialsStorage credentialsStorage;
         private IHueConfigurationUI configurationUI;
         private CredentialsPair credentials;
+
+        private Regex stateSettingRegex = new Regex(@"");
         
 
         public PhilipsHueBridge(
@@ -83,10 +88,31 @@ namespace ChatsPlayHue.LightConnections.PhilipsHue
                 credentialsStorage.StoreCredentials(mac, credentials);
         }
 
-        public IList<ILight> GetLights()
+        public async Task<IList<ILight>> GetLights()
         {
-            // TODO Continue here.
-            throw new NotImplementedException();
+            var lightsRequest = new RestRequest(string.Format("{0}/lights", credentials.Username), Method.GET);
+
+            var lightsResponse = await client.GetAsync<IDictionary<string, APILightDefinition>>(lightsRequest);
+
+            return lightsResponse.Select(pair => (ILight) new PhilipsHueLight(this, uint.Parse(pair.Key), pair.Value)).ToList();
+        }
+
+        internal async Task<LightPowerState> SetLightPowerState(PhilipsHueLight light, LightPowerState newState) {
+            var lightStateRequest = new RestRequest(string.Format("{0}/lights/{1}/state", credentials.Username, light.BridgeLocalID), Method.PUT);
+            lightStateRequest.AddJsonBody(
+                new { 
+                    on = newState == LightPowerState.On,
+                    transitiontime = 1 }
+                );
+
+            var stateSettingResponse = (await client.PutAsync<HueAPIResponse<IDictionary<string, object>>[]>(lightStateRequest))[0];
+
+            if (stateSettingResponse.error != null) {
+                // TODO Better error handling.
+                throw new Exception(stateSettingResponse.error.description);
+            }
+
+            return newState;
         }
     }
 }

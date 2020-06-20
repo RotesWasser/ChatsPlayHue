@@ -8,7 +8,7 @@ namespace ChatsPlayHue.Light
 {
     interface ILightBridge
     {
-        IList<ILight> GetLights();
+        Task<IList<ILight>> GetLights();
 
         Task Connect(); 
     }

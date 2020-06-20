@@ -43,8 +43,6 @@ namespace ChatsPlayHue
         static async Task Main(string[] args)
         {
             var actionSource = container.GetInstance<ILightActionSource>();
-
-            //actionSource.Subscribe(new SimpleLightActionObserver());
             actionSource.Start();
 
             ILightBridge whateverBridge = null;
@@ -64,6 +62,10 @@ namespace ChatsPlayHue
             }
 
             await whateverBridge.Connect();
+
+            var lightsOnBridge = await whateverBridge.GetLights();
+            
+            actionSource.Subscribe(new SimpleLightActionObserver(lightsOnBridge));
 
             Console.Read();
         }
