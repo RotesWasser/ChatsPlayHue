@@ -20,6 +20,15 @@ It's being developed live on stream saturdays 15:00 CEST on my [Twitch channel](
 
 ### Completed
 
+#### Stream 2020-07-04
+Accessing Groups via HTTP API
+
+Potentially designing a layer of abstraction over Lights
+
+#### Stream 2020-06-27
+Setting colors of lights via Hue HTTP API
+    * Luminance calculated by the library we're using seems wrong, investigate further until next stream.
+
 #### Stream 2020-06-20
 Enumeration + control of lights (on / off)
 

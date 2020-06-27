@@ -30,9 +30,13 @@ namespace ChatsPlayHue.LightConnections.PhilipsHue
             throw new NotImplementedException();
         }
 
-        public Task SetLightColor(Color newColor)
+        public async Task SetLightColor(Color newColor)
         {
-            throw new NotImplementedException();
+            try {
+                await parent.SetLightColor(this, newColor);
+            } catch (Exception e) {
+                Console.WriteLine(e);
+            }
         }
 
         public Task<LightPowerState> GetPowerState()

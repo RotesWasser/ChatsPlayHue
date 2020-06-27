@@ -2,6 +2,7 @@
 using ChatsPlayHue.LightActions;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 using System.Threading;
 
@@ -21,7 +22,7 @@ namespace ChatsPlayHue.LightActionSource.DummyLightActionSource
 
             shouldStop = false;
 
-            t = new Thread(new ThreadStart(PeriodicActionSender));
+            t = new Thread(new ThreadStart(PeriodicRedBlueSender));
 
             t.Start();
         }
@@ -36,7 +37,7 @@ namespace ChatsPlayHue.LightActionSource.DummyLightActionSource
             t.Join();
         }
 
-        private void PeriodicActionSender()
+        private void PeriodicOnOffSender()
         {
             LightPowerState nextState = LightPowerState.On;
 
@@ -48,6 +49,23 @@ namespace ChatsPlayHue.LightActionSource.DummyLightActionSource
                 }
 
                 nextState = nextState == LightPowerState.On ? LightPowerState.Off : LightPowerState.On;
+
+                Thread.Sleep(500);
+            }
+        }
+
+        private void PeriodicRedBlueSender()
+        {
+            Color nextColor = Color.Red;
+
+            while (!shouldStop)
+            {
+                foreach(var observer in observers)
+                {
+                    observer.OnNext(new StaticColorLightAction(nextColor));
+                }
+
+                nextColor = nextColor == Color.Red ? Color.Blue : Color.Red;
 
                 Thread.Sleep(500);
             }

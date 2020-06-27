@@ -34,9 +34,13 @@ namespace ChatsPlayHue
             Console.WriteLine(string.Format("Pattern requested: {0}", action.ID));
         }
 
-        public void Visit(StaticColorLightAction action)
+        public async void Visit(StaticColorLightAction action)
         {
             Console.WriteLine(string.Format("Color requested: {0}", action.LightColor));
+            foreach (var light in lightsToControl) {
+                if (light.Name == "Cereal Bowl")
+                    await light.SetLightColor(action.LightColor);
+            }
         }
 
         public async void Visit(ToggleLightAction action)

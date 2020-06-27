@@ -11,6 +11,9 @@ using RestSharp.Serializers.SystemTextJson;
 using ChatsPlayHue.Light;
 using System.Threading.Tasks;
 using System.Net;
+using System.Drawing;
+
+using Colourful;
 
 namespace ChatsPlayHue.LightConnections.PhilipsHue
 {
@@ -26,7 +29,6 @@ namespace ChatsPlayHue.LightConnections.PhilipsHue
         private CredentialsPair credentials;
 
         private Regex stateSettingRegex = new Regex(@"");
-        
 
         public PhilipsHueBridge(
             CredentialsStorage credentialsStorage,
@@ -41,6 +43,8 @@ namespace ChatsPlayHue.LightConnections.PhilipsHue
             client = new RestClient(string.Format("http://{0}/api", this.bridgeIP));
             client.UseSystemTextJson();
         }
+
+
 
         public async Task Connect()
         {
@@ -113,6 +117,33 @@ namespace ChatsPlayHue.LightConnections.PhilipsHue
             }
 
             return newState;
+        }
+
+        internal async Task SetLightColor(PhilipsHueLight light, Color newColor)
+        {
+            var converter = new Colourful.Conversion.ColourfulConverter {
+                ChromaticAdaptation = null
+            };
+            
+            var linearColor = new LinearRGBColor(newColor.R / 255f, newColor.G / 255f, newColor.B /255f);
+            var xyY = converter.ToxyY(linearColor);
+
+
+            var lightStateRequest = new RestRequest(string.Format("{0}/lights/{1}/state", credentials.Username, light.BridgeLocalID), Method.PUT);
+            lightStateRequest.AddJsonBody(
+                new { 
+                    xy = new List<double>() {xyY.x, xyY.y},
+                    bri = Math.Clamp((int) (xyY.Luminance * 255.0), 1, 254),
+                    //bri = 254,
+                    transitiontime = 1 }
+                );
+
+            var stateSettingResponse =  client.Put<HueAPIResponse<IDictionary<string, object>>[]>(lightStateRequest);
+
+            // if (stateSettingResponse.error != null) {
+            //     // TODO Better error handling.
+            //     throw new Exception(stateSettingResponse.error.description);
+            // }
         }
     }
 }
