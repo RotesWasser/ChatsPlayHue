@@ -2,7 +2,7 @@
 
 This application aims to make Smart Lighting controllable by Twitch viewers spending channel points.
 
-It's being developed live on stream saturdays 15:00 CEST on my [Twitch channel](https://www.twitch.tv/RotesWasser).
+It's being developed live on stream saturdays 16:30 CEST on my [Twitch channel](https://www.twitch.tv/RotesWasser).
 
 ## Stream Log
 
