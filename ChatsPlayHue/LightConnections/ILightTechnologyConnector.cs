@@ -4,10 +4,10 @@ using System.Text;
 
 using ChatsPlayHue.Light;
 
-namespace ChatsPlayHue.LightConnections
+namespace ChatsPlayHue.Renderers
 {
     interface ILightTechnologyConnector
     {
-        IList<ILightBridge> GetBridges();
+        IList<IRenderer> GetBridges();
     }
 }

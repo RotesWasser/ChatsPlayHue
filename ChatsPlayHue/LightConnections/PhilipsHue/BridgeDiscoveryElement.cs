@@ -7,7 +7,7 @@ using RestSharp.Serializers.SystemTextJson;
 
 using ChatsPlayHue.Light;
 
-namespace ChatsPlayHue.LightConnections.PhilipsHue
+namespace ChatsPlayHue.Renderers.PhilipsHue
 {
     class BridgeDiscoveryElement {
         public string id {get; set;}

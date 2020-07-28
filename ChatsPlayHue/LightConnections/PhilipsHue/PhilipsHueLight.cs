@@ -9,7 +9,7 @@ using ChatsPlayHue.Light;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace ChatsPlayHue.LightConnections.PhilipsHue
+namespace ChatsPlayHue.Renderers.PhilipsHue
 {
     class PhilipsHueLight : ILight {
         public uint BridgeLocalID {get; private set; }

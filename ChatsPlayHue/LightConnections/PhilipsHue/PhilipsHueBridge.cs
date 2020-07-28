@@ -15,9 +15,9 @@ using System.Drawing;
 
 using Colourful;
 
-namespace ChatsPlayHue.LightConnections.PhilipsHue
+namespace ChatsPlayHue.Renderers.PhilipsHue
 {
-    public class PhilipsHueBridge : ILightBridge
+    public class PhilipsHueBridge : IRenderer
     {
         private RestClient client;
 

@@ -10,7 +10,7 @@ using RestSharp.Serializers.SystemTextJson;
 using ChatsPlayHue.Light;
 using SimpleInjector;
 
-namespace ChatsPlayHue.LightConnections.PhilipsHue
+namespace ChatsPlayHue.Renderers.PhilipsHue
 {
     class PhilipsHueConnector : ILightTechnologyConnector
     {
@@ -28,7 +28,7 @@ namespace ChatsPlayHue.LightConnections.PhilipsHue
         }
 
 
-        public IList<ILightBridge> GetBridges()
+        public IList<IRenderer> GetBridges()
         {
             // TODO This is terrible because we keep creating new bridges on every GetBridges call here.
             // It would be better if we stored them in a dict of bridge identifier -> bridge object.
@@ -37,7 +37,7 @@ namespace ChatsPlayHue.LightConnections.PhilipsHue
             var response = client.Get<BridgeDiscoveryElement[]>(request);
 
             return response.Data.Select(
-                x => (ILightBridge) new PhilipsHueBridge(credentialsStorage, hueUI, x.id, x.internalipaddress)).ToList();
+                x => (IRenderer) new PhilipsHueBridge(credentialsStorage, hueUI, x.id, x.internalipaddress)).ToList();
         }
     }
 }

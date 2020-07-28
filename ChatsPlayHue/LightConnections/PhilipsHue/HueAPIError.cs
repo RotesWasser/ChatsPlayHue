@@ -8,7 +8,7 @@ using RestSharp.Serializers.SystemTextJson;
 using ChatsPlayHue.Light;
 using System.Threading.Tasks;
 
-namespace ChatsPlayHue.LightConnections.PhilipsHue
+namespace ChatsPlayHue.Renderers.PhilipsHue
 {
     public class HueAPIError {
         public int type {get; set;}

@@ -1,8 +1,8 @@
 ﻿using ChatsPlayHue.LightActions;
 using ChatsPlayHue.LightActionSource;
 using ChatsPlayHue.LightActionSource.DummyLightActionSource;
-using ChatsPlayHue.LightConnections;
-using ChatsPlayHue.LightConnections.PhilipsHue;
+using ChatsPlayHue.Renderers;
+using ChatsPlayHue.Renderers.PhilipsHue;
 using SimpleInjector;
 using SimpleInjector.Lifestyles;
 using System;
@@ -45,7 +45,7 @@ namespace ChatsPlayHue
             var actionSource = container.GetInstance<ILightActionSource>();
             actionSource.Start();
 
-            ILightBridge whateverBridge = null;
+            IRenderer whateverBridge = null;
 
             foreach(var connector in container.GetAllInstances<ILightTechnologyConnector>()) {
                 var bridges = connector.GetBridges();

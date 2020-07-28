@@ -9,7 +9,7 @@ using ChatsPlayHue.Light;
 using System.Threading.Tasks;
 using System.Text.Json.Serialization;
 
-namespace ChatsPlayHue.LightConnections.PhilipsHue
+namespace ChatsPlayHue.Renderers.PhilipsHue
 {
     public class UserCreationRequestParameters {
         [JsonPropertyName("devicetype")]

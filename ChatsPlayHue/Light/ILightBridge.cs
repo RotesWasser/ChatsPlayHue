@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace ChatsPlayHue.Light
 {
-    interface ILightBridge
+    interface IRenderer
     {
         Task<IList<ILight>> GetLights();
+
+        
 
         Task Connect(); 
     }
